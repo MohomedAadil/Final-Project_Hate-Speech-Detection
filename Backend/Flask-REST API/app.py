@@ -7,8 +7,10 @@ import pymysql
 from keras.preprocessing import sequence
 from nltk.stem import PorterStemmer
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+cors = CORS(app)
 
 # Preprocessing functions
 def clean_text(text):
