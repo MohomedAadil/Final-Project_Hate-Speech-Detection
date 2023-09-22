@@ -42,14 +42,37 @@ db_name = 'textdb'
 # Initialize the database connection
 db = pymysql.connect(host=db_host, user=db_user, password=db_password, database=db_name)
 cursor = db.cursor()
-@app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World!'
 
 # Load the model and tokenizer
 load_model = keras.models.load_model("hate&abusive_model.h5")
 with open('tokenizer.pickle', 'rb') as handle:
     load_tokenizer = pickle.load(handle)
 
+@app.route('/add_post', methods=['POST'])
+def add_post():
+    try:
+        content = request.json.get('content')
+        cleaned_text = clean_text(content)
+
+        # Use a hate speech detection model
+        seq = load_tokenizer.texts_to_sequences([cleaned_text])
+        padded = sequence.pad_sequences(seq, maxlen=300)
+        pred = load_model.predict(padded)
+
+        if pred <= 0.5:  # You can adjust the threshold as needed
+            # If it's not hate speech, add the post to the database
+            sql = "INSERT INTO posts (content) VALUES (%s)"
+            cursor.execute(sql, (content,))
+            db.commit()
+            return jsonify({'message': 'Post added successfully'}), 200
+        else:
+            return jsonify({'error': 'Hate speech detected'}), 400
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
