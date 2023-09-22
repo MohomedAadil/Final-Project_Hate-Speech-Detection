@@ -105,5 +105,16 @@ def update_post(post_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/delete_post/<int:post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    try:
+        sql = "DELETE FROM posts WHERE id = %s"
+        cursor.execute(sql, (post_id,))
+        db.commit()
+        return jsonify({'message': 'Post deleted successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)
