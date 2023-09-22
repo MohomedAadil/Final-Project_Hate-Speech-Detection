@@ -1,9 +1,37 @@
 import keras
+import re
+import string
+import nltk
 import pickle
 import pymysql
-from flask import Flask
+from keras.preprocessing import sequence
+from nltk.stem import PorterStemmer
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
+
+# Preprocessing functions
+def clean_text(text):
+    text = str(text).lower()
+    text = re.sub('\[.*?\]', '', text)
+    text = re.sub('https?://\S+|www\.\S+', '', text)
+    text = re.sub('<.*?>+', '', text)
+    text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
+    text = re.sub('\n', '', text)
+    text = re.sub('\w*\d\w*', '', text)
+    text = [word for word in text.split(' ') if word not in stopword]
+    text = " ".join(text)
+    #text = [stemmer.stem(word) for word in text.split(' ')]
+    text = " ".join(text.split())
+    return text
+
+# Initialize the Porter Stemmer
+nltk.download('punkt')
+stemmer = PorterStemmer()
+
+# Define the stopword list and stemmer (you should import these)
+stopword = []
+stemmer = None
 
 # MySQL Database Configuration
 db_host = 'localhost'
