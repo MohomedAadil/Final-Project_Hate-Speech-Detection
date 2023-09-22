@@ -71,7 +71,17 @@ def add_post():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/get_posts', methods=['GET'])
+def get_posts():
+    try:
+        sql = "SELECT * FROM posts"
+        cursor.execute(sql)
+        posts = cursor.fetchall()
+        post_list = [{'id': post[0], 'content': post[1]} for post in posts]
+        return jsonify(post_list), 200
 
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':
