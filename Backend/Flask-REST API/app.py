@@ -83,6 +83,27 @@ def get_posts():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/update_post/<int:post_id>', methods=['PUT'])
+def update_post(post_id):
+    try:
+        content = request.json.get('content')
+        cleaned_text = clean_text(content)
+
+        # Use a hate speech detection model
+        seq = load_tokenizer.texts_to_sequences([cleaned_text])
+        padded = sequence.pad_sequences(seq, maxlen=300)
+        pred = load_model.predict(padded)
+
+        if pred <= 0.5:  # You can adjust the threshold as needed
+            sql = "UPDATE posts SET content = %s WHERE id = %s"
+            cursor.execute(sql, (content, post_id))
+            db.commit()
+            return jsonify({'message': 'Post updated successfully'}), 200
+        else:
+            return jsonify({'error': 'Hate speech detected'}), 400
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
