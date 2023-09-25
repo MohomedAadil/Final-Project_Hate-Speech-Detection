@@ -23,7 +23,6 @@ def clean_text(text):
     text = re.sub('\w*\d\w*', '', text)
     text = [word for word in text.split(' ') if word not in stopword]
     text = " ".join(text)
-    #text = [stemmer.stem(word) for word in text.split(' ')]
     text = " ".join(text.split())
     return text
 
