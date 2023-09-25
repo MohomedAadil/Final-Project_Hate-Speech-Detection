@@ -114,3 +114,23 @@ async function updatePost(postId, currentContent) {
         }
     }
 }
+
+// Event listener for form submission
+postForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const content = contentInput.value.trim();
+
+    if (content !== '') {
+        addPost(content);
+    } else {
+        showError('Content cannot be empty.');
+    }
+});
+
+// Event listener for viewing all posts
+viewAllPostsButton.addEventListener('click', () => {
+    fetchPosts();
+});
+
+// Initial fetch of posts
+fetchPosts();
