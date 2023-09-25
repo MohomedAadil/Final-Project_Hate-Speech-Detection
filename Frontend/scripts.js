@@ -39,3 +39,34 @@ async function fetchPosts() {
         console.error('Error fetching posts:', error);
     }
 }
+
+// Function to add a new post
+async function addPost(content) {
+    try {
+        const response = await fetch('http://localhost:5000/add_post', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content })
+        });
+
+        if (response.ok) {
+            contentInput.value = '';
+            errorContainer.textContent = '';
+            fetchPosts();
+        } else {
+            // Check if the response contains JSON data
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const errorData = await response.json();
+                showError(errorData.error);
+            } else {
+                // Handle the case where the response is not in JSON format
+                showError('An error occurred while adding the post.');
+            }
+        }
+    } catch (error) {
+        console.error('Error adding post:', error);
+    }
+}
