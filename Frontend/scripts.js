@@ -88,3 +88,29 @@ async function deletePost(postId) {
         console.error('Error deleting post:', error);
     }
 }
+
+// Function to update a post
+async function updatePost(postId, currentContent) {
+    const updatedContent = prompt('Update the post:', currentContent);
+
+    if (updatedContent !== null) {
+        try {
+            const response = await fetch(`http://localhost:5000/update_post/${postId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: updatedContent })
+            });
+
+            if (response.ok) {
+                fetchPosts();
+            } else {
+                const errorData = await response.json();
+                showError(errorData.error);
+            }
+        } catch (error) {
+            console.error('Error updating post:', error);
+        }
+    }
+}
