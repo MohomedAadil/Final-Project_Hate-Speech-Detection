@@ -70,3 +70,21 @@ async function addPost(content) {
         console.error('Error adding post:', error);
     }
 }
+
+// Function to delete a post
+async function deletePost(postId) {
+    try {
+        const response = await fetch(`http://localhost:5000/delete_post/${postId}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            fetchPosts();
+        } else {
+            const errorData = await response.json();
+            showError(errorData.error);
+        }
+    } catch (error) {
+        console.error('Error deleting post:', error);
+    }
+}
