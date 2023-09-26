@@ -65,7 +65,7 @@ def add_post():
         if pred <= 0.5:  # You can adjust the threshold as needed
             # If it's not hate speech, add the post to the database
             sql = "INSERT INTO posts (content) VALUES (%s)"
-            cursor.execute(sql, (content,))
+            cursor.execute(sql, (content.encode('utf-8'),))
             db.commit()
             return jsonify({'message': 'Post added successfully'}), 200
         else:
@@ -99,7 +99,7 @@ def update_post(post_id):
 
         if pred <= 0.5:  # You can adjust the threshold as needed
             sql = "UPDATE posts SET content = %s WHERE id = %s"
-            cursor.execute(sql, (content, post_id))
+            cursor.execute(sql, (content.encode('utf-8'), post_id))
             db.commit()
             return jsonify({'message': 'Post updated successfully'}), 200
         else:
