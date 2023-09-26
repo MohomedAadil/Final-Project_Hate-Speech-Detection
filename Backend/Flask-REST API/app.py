@@ -4,6 +4,7 @@ import string
 import nltk
 import pickle
 import pymysql
+import emoji
 from keras.preprocessing import sequence
 from nltk.stem import PorterStemmer
 from flask import Flask, request, jsonify
@@ -15,6 +16,7 @@ cors = CORS(app)
 # Preprocessing functions
 def clean_text(text):
     text = str(text).lower()
+    text = emoji.demojize(text)
     text = re.sub('\[.*?\]', '', text)
     text = re.sub('https?://\S+|www\.\S+', '', text)
     text = re.sub('<.*?>+', '', text)
