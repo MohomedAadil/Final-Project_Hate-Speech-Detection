@@ -22,7 +22,7 @@ async function fetchPosts() {
             const li = document.createElement('li');
             li.className = 'post-item';
             li.textContent = post.content;
-
+            
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
             deleteButton.addEventListener('click', () => deletePost(post.id));
@@ -32,7 +32,7 @@ async function fetchPosts() {
             updateButton.addEventListener('click', () => updatePost(post.id, post.content));
 
             li.appendChild(deleteButton);
-            li.appendChild(updateButton);
+            //li.appendChild(updateButton);
             postList.appendChild(li);
         });
     } catch (error) {

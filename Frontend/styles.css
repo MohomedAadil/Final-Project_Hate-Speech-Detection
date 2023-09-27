@@ -65,6 +65,7 @@ form {
 }
 
 .btn:hover {
+    transition: 0.35s;
     background-color: #0056b3;
 }
 
@@ -108,8 +109,12 @@ h2 {
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
+    margin-right: 3px;
+    margin-left: 10px;
+    align-items:stretch;
 }
 
 .post-item button:hover {
+    transition: 0.35s;
     background-color: #0056b3;
 }
