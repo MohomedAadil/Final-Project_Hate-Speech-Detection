@@ -8,6 +8,9 @@ const viewAllPostsButton = document.getElementById('viewAllPosts');
 // Function to display error messages
 function showError(message) {
     errorContainer.textContent = message;
+    setTimeout(() => {
+        errorContainer.textContent = ''; // Clear the error message after 5 seconds
+    }, 5000); // 5000 milliseconds (5 seconds)
 }
 
 // Function to fetch and display posts
