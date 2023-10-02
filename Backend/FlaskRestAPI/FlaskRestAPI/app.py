@@ -75,7 +75,11 @@ def add_post():
             sql = "INSERT INTO posts (content) VALUES (%s)"
             cursor.execute(sql, (content.encode('utf-8'),))
             db.commit()
-            return jsonify({'message': 'Post added successfully'}), 200
+
+            # Retrieve the ID of the newly added post
+            post_id = cursor.lastrowid
+
+            return jsonify({'message': 'Post added successfully', 'post_id': post_id}), 200
         else:
             return jsonify({'error': 'Hate speech detected'}), 400
 
