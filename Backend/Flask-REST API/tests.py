@@ -1,9 +1,12 @@
 import unittest
+import app
+import json
+#from Backend.api.flask_app import app
 
-
-class MyTestCase(unittest.TestCase):
-    def test_something(self):
-        self.assertEqual(True, False)  # add assertion here
+class TestAPI(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
+        self.app.testing = True
 
 
 if __name__ == '__main__':
