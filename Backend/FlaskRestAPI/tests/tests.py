@@ -1,7 +1,7 @@
 import unittest
 #import app
 import json
-from Backend.FlaskRestAPI.api.flask_app import app
+from FlaskRestAPI.app import app
 
 class TestAPI(unittest.TestCase):
     def setUp(self):
