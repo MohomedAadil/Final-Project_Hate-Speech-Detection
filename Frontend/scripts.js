@@ -77,7 +77,7 @@ async function addPost(content) {
 // Function to delete a post
 async function deletePost(postId) {
     try {
-        const response = await fetch(`http://localhost:5000/delete_post/${postId}`, {
+        const response = await fetch(`http://localhost:5000/delete_post/${encodeURIComponent(postId)}`, {
             method: 'DELETE'
         });
 
@@ -98,7 +98,7 @@ async function updatePost(postId, currentContent) {
 
     if (updatedContent !== null) {
         try {
-            const response = await fetch(`http://localhost:5000/update_post/${postId}`, {
+            const response = await fetch(`http://localhost:5000/update_post/${encodeURIComponent(postId)}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -137,3 +137,8 @@ viewAllPostsButton.addEventListener('click', () => {
 
 // Initial fetch of posts
 fetchPosts();
+
+// Function to escape HTML content
+function escapeHTML(unsafe) {
+    return unsafe.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
