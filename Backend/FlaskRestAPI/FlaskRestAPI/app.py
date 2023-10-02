@@ -1,5 +1,6 @@
 import keras
 import re
+import os
 import string
 import nltk
 import pickle
@@ -46,9 +47,16 @@ db_name = 'textdb'
 db = pymysql.connect(host=db_host, user=db_user, password=db_password, database=db_name)
 cursor = db.cursor()
 
+# Get the directory of the current script
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+# Construct the absolute paths to the model and tokenizer files
+model_path = os.path.join(current_directory, 'hate_abusive_model.h5')
+tokenizer_path = os.path.join(current_directory, 'tokenizer.pickle')
+
 # Load the model and tokenizer
-load_model = keras.models.load_model("./hate_abusive_model.h5")
-with open('tokenizer.pickle', 'rb') as handle:
+load_model = keras.models.load_model(model_path)
+with open(tokenizer_path, 'rb') as handle:
     load_tokenizer = pickle.load(handle)
 
 @app.route('/add_post', methods=['POST'])
