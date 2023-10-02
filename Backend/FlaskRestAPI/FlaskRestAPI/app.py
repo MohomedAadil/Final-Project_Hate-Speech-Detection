@@ -47,7 +47,7 @@ db = pymysql.connect(host=db_host, user=db_user, password=db_password, database=
 cursor = db.cursor()
 
 # Load the model and tokenizer
-load_model = keras.models.load_model("hate&abusive_model.h5")
+load_model = keras.models.load_model("./hate_abusive_model.h5")
 with open('tokenizer.pickle', 'rb') as handle:
     load_tokenizer = pickle.load(handle)
 
