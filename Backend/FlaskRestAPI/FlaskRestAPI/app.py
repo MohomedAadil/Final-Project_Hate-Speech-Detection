@@ -92,7 +92,7 @@ def get_posts():
         sql = "SELECT * FROM posts"
         cursor.execute(sql)
         posts = cursor.fetchall()
-        post_list = [{'id': post[0], 'content': post[1]} for post in posts]
+        post_list = [{'id': post[0], 'content': emoji.emojize(post[1])} for post in posts]
         return jsonify(post_list), 200
 
     except Exception as e:

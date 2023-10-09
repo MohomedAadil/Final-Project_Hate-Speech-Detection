@@ -6,7 +6,7 @@ const postList = document.getElementById('postList');
 const viewAllPostsButton = document.getElementById('viewAllPosts');
 
 // Function to display error messages
-export function showError(message) {
+function showError(message) {
     if (errorContainer) {
         errorContainer.textContent = message;
         setTimeout(() => {
@@ -16,11 +16,20 @@ export function showError(message) {
 }
 
 // Function to fetch and display posts
-export async function fetchPosts() {
+async function fetchPosts() {
     if (postList) {
         try {
             const response = await fetch('http://localhost:5000/get_posts');
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
             const posts = await response.json();
+
+            if (!Array.isArray(posts)) {
+                throw new Error('Invalid response format');
+            }
 
             postList.innerHTML = '';
 
@@ -38,17 +47,18 @@ export async function fetchPosts() {
                 updateButton.addEventListener('click', () => updatePost(post.id, post.content));
 
                 li.appendChild(deleteButton);
-                li.appendChild(updateButton);
+                //li.appendChild(updateButton);
                 postList.appendChild(li);
             });
         } catch (error) {
             console.error('Error fetching posts:', error);
+            showError('An error occurred while fetching posts.');
         }
     }
 }
 
 // Function to add a new post
-export async function addPost(content) {
+async function addPost(content) {
     if (contentInput && errorContainer) {
         try {
             const response = await fetch('http://localhost:5000/add_post', {
@@ -81,7 +91,7 @@ export async function addPost(content) {
 }
 
 // Function to delete a post
-export async function deletePost(postId) {
+async function deletePost(postId) {
     if (postList) {
         try {
             const response = await fetch(`http://localhost:5000/delete_post/${encodeURIComponent(postId)}`, {
@@ -101,7 +111,7 @@ export async function deletePost(postId) {
 }
 
 // Function to update a post
-export async function updatePost(postId, currentContent) {
+async function updatePost(postId, currentContent) {
     if (postList) {
         const updatedContent = prompt('Update the post:', currentContent);
 

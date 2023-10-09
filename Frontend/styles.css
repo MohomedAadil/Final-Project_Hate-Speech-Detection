@@ -118,3 +118,26 @@ h2 {
     transition: 0.35s;
     background-color: #0056b3;
 }
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .container {
+      max-width: 100%;
+    }
+  
+    h1 {
+      font-size: 24px;
+    }
+  
+    .btn {
+      font-size: 18px;
+    }
+  
+    .post-item {
+      padding: 10px;
+    }
+  
+    .post-item button {
+      font-size: 12px;
+    }
+  }
