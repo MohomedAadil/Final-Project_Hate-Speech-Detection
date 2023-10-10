@@ -8,7 +8,7 @@ import pymysql
 import emoji
 from keras.preprocessing import sequence
 from nltk.stem import PorterStemmer
-from flask_jwt_extended import JWTManager, create_access_token
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -84,9 +84,9 @@ def authenticate():
         else:
             return jsonify({'error': 'Authentication failed'}), 401
 
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 @app.route('/add_post', methods=['POST'])
 def add_post():
