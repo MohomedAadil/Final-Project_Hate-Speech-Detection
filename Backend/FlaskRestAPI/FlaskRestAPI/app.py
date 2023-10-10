@@ -64,6 +64,21 @@ load_model = keras.models.load_model(model_path)
 with open(tokenizer_path, 'rb') as handle:
     load_tokenizer = pickle.load(handle)
 
+def check_post_existence(post_id):
+    try:
+        # Execute a database query to check if a post with the given ID exists
+        sql = "SELECT id FROM posts WHERE id = %s"
+        cursor.execute(sql, (post_id,))
+        result = cursor.fetchone()
+
+        # If a result is found, the post exists; otherwise, it doesn't
+        return result is not None
+
+    except pymysql.Error as e:
+        # Handle any database errors appropriately
+        print(f"Database error: {e}")
+        return False
+
 # Define a route for user authentication
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
@@ -132,7 +147,7 @@ def update_post(post_id):
     try:
         content = request.json.get('content')
         cleaned_text = clean_text(content)
-
+        post_exists = check_post_existence(post_id)
         # Use a hate speech detection model
         seq = load_tokenizer.texts_to_sequences([cleaned_text])
         padded = sequence.pad_sequences(seq, maxlen=300)
@@ -145,9 +160,10 @@ def update_post(post_id):
             return jsonify({'message': 'Post updated successfully'}), 200
         else:
             return jsonify({'error': 'Hate speech detected'}), 400
-
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
 
 @app.route('/delete_post/<int:post_id>', methods=['DELETE'])
 def delete_post(post_id):

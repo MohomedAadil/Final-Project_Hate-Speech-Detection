@@ -1,12 +1,13 @@
 
   const { TextEncoder,TextDecoder } = require('util');
+  import { fetch } from 'jest-fetch-mock';
 
   global.TextEncoder = TextEncoder;
   global.TextDecoder = TextDecoder;
 
   global.testEnviroment = 'node';
 
-  import { addPost, fetchPosts, deletePost, updatePost } from './scripts.js';
+  import { addPost, fetchPosts, deletePost, updatePost, login, logout} from './scripts.js';
 
   const mockFetch = jest.fn();
   global.fetch = mockFetch;

@@ -12,6 +12,24 @@ class TestAPI(unittest.TestCase):
         # Clean up any test data or resources if necessary
         pass
 
+    def test_authentication_success(self):
+        # Simulate a POST request to authenticate a user
+        response = self.app.post('/authenticate', json={'username': 'Admin', 'password': 'admin123'})
+        # Check if the response status code is 200 (success)
+        self.assertEqual(response.status_code, 200)
+        # Check if the response contains a token
+        data = json.loads(response.data.decode('utf-8'))
+        self.assertTrue('token' in data)
+
+    def test_authentication_failure(self):
+        # Simulate a POST request with incorrect credentials
+        response = self.app.post('/authenticate', json={'username': 'testuser', 'password': 'incorrectpassword'})
+        # Check if the response status code is 401 (unauthorized)
+        self.assertEqual(response.status_code, 401)
+        # Check if the response contains an error message
+        data = json.loads(response.data.decode('utf-8'))
+        self.assertTrue('error' in data)
+
     def test_add_post(self):
         # Simulate a POST request to add a new post
         response = self.app.post('/add_post', json={'content': 'Test post content'})
@@ -20,6 +38,15 @@ class TestAPI(unittest.TestCase):
         # Check the response content for the expected message
         data = json.loads(response.data.decode('utf-8'))
         self.assertEqual(data['message'], 'Post added successfully')
+
+    def test_add_post_with_hate_speech(self):
+        # Simulate a POST request to add a post containing hate speech
+        response = self.app.post('/add_post', json={'content': 'This is hate speech!'})
+        # Check if the response status code is 400 (bad request)
+        self.assertEqual(response.status_code, 400)
+        # Check if the response contains an error message
+        data = json.loads(response.data.decode('utf-8'))
+        self.assertTrue('error' in data)
 
     def test_get_posts(self):
             # Simulate a GET request to retrieve posts
