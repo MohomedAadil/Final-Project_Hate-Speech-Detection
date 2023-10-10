@@ -16,6 +16,21 @@ function showError(message) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Your existing code here...
+
+    const logoutButton = document.getElementById('logoutButton');
+
+    logoutButton.addEventListener('click', () => {
+        // Clear the JWT token from local storage (or perform logout actions)
+        localStorage.removeItem('token');
+        // Replace the current history entry with the login page
+        window.history.replaceState(null, null, '/login.html');
+        // Redirect or perform other actions after logout
+        window.location.href = '/login.html'; // Redirect to the login page
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById('login-form');
 
     loginForm.addEventListener('submit', async function (e) {
@@ -42,10 +57,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 window.location.href = '/index.html';
             } else {
                 // Handle authentication error (e.g., show an error message)
-                console.error('Authentication failed');
+                alert('Authentication failed\nEnter the correct user credentials');
             }
         } catch (error) {
-            console.error('Error:', error);
+            alert('Error:', error);
         }
     });
 });
