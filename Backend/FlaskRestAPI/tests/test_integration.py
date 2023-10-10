@@ -38,5 +38,29 @@ class TestIntegration(unittest.TestCase):
         data = json.loads(response.data.decode('utf-8'))
         self.assertEqual(data['message'], 'Post deleted successfully')
 
+        # 5. Authentication Success
+        response = self.app.post('/authenticate', json={'username': 'Admin', 'password': 'admin123'})
+        # Check if the response status code is 200 (success)
+        self.assertEqual(response.status_code, 200)
+        # Check if the response contains a token
+        data = json.loads(response.data.decode('utf-8'))
+        self.assertTrue('token' in data)
+
+        # 6. Authentication Failure
+        response = self.app.post('/authenticate', json={'username': 'testuser', 'password': 'incorrectpassword'})
+        # Check if the response status code is 401 (unauthorized)
+        self.assertEqual(response.status_code, 401)
+        # Check if the response contains an error message
+        data = json.loads(response.data.decode('utf-8'))
+        self.assertTrue('error' in data)
+
+        # 7. Add Hate speech post
+        response = self.app.post('/add_post', json={'content': 'This is hate speech!'})
+        # Check if the response status code is 400 (bad request)
+        self.assertEqual(response.status_code, 400)
+        # Check if the response contains an error message
+        data = json.loads(response.data.decode('utf-8'))
+        self.assertTrue('error' in data)
+
 if __name__ == '__main__':
     unittest.main()

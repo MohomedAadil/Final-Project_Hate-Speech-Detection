@@ -34,11 +34,33 @@ def test_update_post(client):
     assert response.status_code == 200
     assert 'Post updated successfully' in response.get_json()['message']
 
-def test_delete_post(client):
+def test_delete_post(client, monkeypatch):
     """Test the /delete_post/<int:post_id> endpoint."""
     response = client.delete('/delete_post/1')
+    print(response.data)  # Print the response data for debugging
     assert response.status_code == 200
     assert 'Post deleted successfully' in response.get_json()['message']
+
+def test_authentication_success(client):
+    """Test user authentication with correct credentials."""
+    data = {
+        'username': 'Admin',
+        'password': 'admin123'
+    }
+    response = client.post('/authenticate', json=data)
+    assert response.status_code == 200
+    assert 'token' in response.get_json()
+
+def test_authentication_failure(client):
+    """Test user authentication with incorrect credentials."""
+    data = {
+        'username': 'testuser',
+        'password': 'incorrectpassword'
+    }
+    response = client.post('/authenticate', json=data)
+    assert response.status_code == 401
+    assert 'error' in response.get_json()
+
 
 if __name__ == '__main__':
     client.main()
