@@ -8,6 +8,7 @@ import pymysql
 import emoji
 from keras.preprocessing import sequence
 from nltk.stem import PorterStemmer
+from flask_jwt_extended import JWTManager, create_access_token
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -37,6 +38,10 @@ stemmer = PorterStemmer()
 stopword = []
 stemmer = None
 
+# Configure Flask JWT Extended
+app.config['JWT_SECRET_KEY'] = '4f7a70d1c8b5127e537b3625e96a3254a02e0a7190e246ca4edab5a7ce1af4e4'
+jwt = JWTManager(app)
+
 # MySQL Database Configuration
 db_host = 'localhost'
 db_user = 'root'
@@ -58,6 +63,30 @@ tokenizer_path = os.path.join(current_directory, 'tokenizer_93.pickle')
 load_model = keras.models.load_model(model_path)
 with open(tokenizer_path, 'rb') as handle:
     load_tokenizer = pickle.load(handle)
+
+# Define a route for user authentication
+@app.route('/authenticate', methods=['POST'])
+def authenticate():
+    try:
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
+
+        # Perform user authentication by querying the database
+        sql = "SELECT * FROM users WHERE username = %s AND password = %s"
+        cursor.execute(sql, (username, password))
+        user = cursor.fetchone()
+
+        if user:
+            # Generate an access token upon successful authentication
+            access_token = create_access_token(identity=username)
+            return jsonify({'token': access_token}), 200
+        else:
+            return jsonify({'error': 'Authentication failed'}), 401
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 @app.route('/add_post', methods=['POST'])
 def add_post():
