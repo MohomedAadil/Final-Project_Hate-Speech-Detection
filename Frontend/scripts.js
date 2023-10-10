@@ -15,6 +15,41 @@ function showError(message) {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    const loginForm = document.getElementById('login-form');
+
+    loginForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Send a POST request to your backend for authentication
+        try {
+            const response = await fetch('http://localhost:5000/authenticate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const token = data.token;
+                // Store the JWT token in local storage or as needed
+                localStorage.setItem('token', token);
+                // Redirect to a secure area or perform other actions
+                window.location.href = '/index.html';
+            } else {
+                // Handle authentication error (e.g., show an error message)
+                console.error('Authentication failed');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+});
+
 // Function to fetch and display posts
 async function fetchPosts() {
     if (postList) {
