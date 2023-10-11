@@ -56,8 +56,8 @@ cursor = db.cursor()
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
 # Construct the absolute paths to the model and tokenizer files
-model_path = os.path.join(current_directory, 'hate_abusive_model_93.h5')
-tokenizer_path = os.path.join(current_directory, 'tokenizer_93.pickle')
+model_path = os.path.join(current_directory, 'hate_abusive_model_93_2.h5')
+tokenizer_path = os.path.join(current_directory, 'tokenizer_93_2.pickle')
 
 # Load the model and tokenizer
 load_model = keras.models.load_model(model_path)
