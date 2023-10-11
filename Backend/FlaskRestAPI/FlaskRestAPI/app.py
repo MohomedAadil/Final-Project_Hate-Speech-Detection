@@ -125,7 +125,7 @@ def add_post():
 
             return jsonify({'message': 'Post added successfully', 'post_id': post_id}), 200
         else:
-            return jsonify({'error': 'Hate speech detected'}), 400
+            return jsonify({'error': 'Hate or offensive speech detected'}), 400
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
