@@ -1,6 +1,6 @@
 import unittest
 import json
-from FlaskRestAPI.app import app
+import app
 
 class TestIntegration(unittest.TestCase):
     def setUp(self):

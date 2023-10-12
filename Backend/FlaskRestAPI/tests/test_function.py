@@ -1,7 +1,7 @@
 # Import the function to be tested
 import pytest
 import json
-from FlaskRestAPI.app import app
+import app
 
 @pytest.fixture
 def client():
