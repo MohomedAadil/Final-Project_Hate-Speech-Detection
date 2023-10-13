@@ -1,4 +1,3 @@
-from tensorflow import keras
 import re
 import os
 import string
@@ -6,6 +5,7 @@ import nltk
 import pickle
 import pymysql
 import emoji
+from tensorflow import keras
 from keras.preprocessing import sequence
 from nltk.stem import PorterStemmer
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
