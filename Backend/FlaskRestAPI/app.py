@@ -64,6 +64,7 @@ load_model = keras.models.load_model(model_path)
 with open(tokenizer_path, 'rb') as handle:
     load_tokenizer = pickle.load(handle)
 
+
 def check_post_existence(post_id):
     try:
         # Execute a database query to check if a post with the given ID exists
