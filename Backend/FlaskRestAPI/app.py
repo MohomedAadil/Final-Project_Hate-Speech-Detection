@@ -43,10 +43,10 @@ app.config['JWT_SECRET_KEY'] = '4f7a70d1c8b5127e537b3625e96a3254a02e0a7190e246ca
 jwt = JWTManager(app)
 
 # MySQL Database Configuration
-db_host = 'sql200.infinityfree.com'
-db_user = 'if0_35205994'
-db_password = 'Aadil123ICBTcampus'
-db_name = 'if0_35205994_textdb'
+db_host = 'bgwflfocyzpclahuvmye-mysql.services.clever-cloud.com'
+db_user = 'u9ouffmnzsojflso'
+db_password = 'oPNdYs2GCr5kmpTDMUmv'
+db_name = 'bgwflfocyzpclahuvmye'
 db_port = 3306
 
 # Initialize the database connection
