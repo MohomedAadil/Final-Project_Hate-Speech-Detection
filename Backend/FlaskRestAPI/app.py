@@ -47,9 +47,10 @@ db_host = 'sql200.infinityfree.com'
 db_user = 'if0_35205994'
 db_password = 'Aadil123ICBTcampus'
 db_name = 'if0_35205994_textdb'
+db_port = '3306'
 
 # Initialize the database connection
-db = pymysql.connect(host=db_host, user=db_user, password=db_password, database=db_name)
+db = pymysql.connect(host=db_host, user=db_user, password=db_password, database=db_name, port=db_port)
 cursor = db.cursor()
 
 # Get the directory of the current script
