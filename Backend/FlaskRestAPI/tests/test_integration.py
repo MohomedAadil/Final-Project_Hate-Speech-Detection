@@ -1,6 +1,7 @@
 import unittest
 import json
-import app
+from FlaskAPI.app import app
+
 
 class TestIntegration(unittest.TestCase):
     def setUp(self):

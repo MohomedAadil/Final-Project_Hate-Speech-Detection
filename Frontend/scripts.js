@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     logoutButton.addEventListener('click', () => {
         // Clear the JWT token from local storage (or perform logout actions)
         localStorage.removeItem('token');
+        alert('logging out');
         // Replace the current history entry with the login page
         window.history.replaceState(null, null, '/login.html');
         // Redirect or perform other actions after logout
@@ -54,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Store the JWT token in local storage or as needed
                 localStorage.setItem('token', token);
                 // Redirect to a secure area or perform other actions
+                alert('Login Successful');
                 window.location.href = '/index.html';
             } else {
                 // Handle authentication error (e.g., show an error message)
