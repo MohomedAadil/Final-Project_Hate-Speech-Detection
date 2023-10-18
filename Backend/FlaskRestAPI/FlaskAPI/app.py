@@ -5,7 +5,7 @@ import nltk
 import pickle
 import pymysql
 import emoji
-from tensorflow import keras
+import keras
 from keras.preprocessing import sequence
 from nltk.stem import PorterStemmer
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -15,7 +15,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 cors = CORS(app)
 
-# Preprocessing functions
+
 def clean_text(text):
     text = str(text).lower()
     text = emoji.demojize(text)
@@ -30,37 +30,36 @@ def clean_text(text):
     text = " ".join(text.split())
     return text
 
-# Initialize the Porter Stemmer
+
 nltk.download('punkt')
 stemmer = PorterStemmer()
 
-# Define the stopword list and stemmer (you should import these)
+
 stopword = []
 stemmer = None
 
-# Configure Flask JWT Extended
+
 app.config['JWT_SECRET_KEY'] = '4f7a70d1c8b5127e537b3625e96a3254a02e0a7190e246ca4edab5a7ce1af4e4'
 jwt = JWTManager(app)
 
 # MySQL Database Configuration
-db_host = 'bgwflfocyzpclahuvmye-mysql.services.clever-cloud.com'
-db_user = 'u9ouffmnzsojflso'
-db_password = 'oPNdYs2GCr5kmpTDMUmv'
-db_name = 'bgwflfocyzpclahuvmye'
+db_host = 'bicnyqlubvyq3dydciq7-mysql.services.clever-cloud.com'
+db_user = 'ueknada4uqfdshts'
+db_password = 'QiLS0HWyVPYhsQKodNAL'
+db_name = 'bicnyqlubvyq3dydciq7'
 db_port = 3306
 
 # Initialize the database connection
 db = pymysql.connect(host=db_host, user=db_user, password=db_password, database=db_name, port=db_port)
 cursor = db.cursor()
 
-# Get the directory of the current script
+
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
-# Construct the absolute paths to the model and tokenizer files
+
 model_path = os.path.join(current_directory, 'hate_abusive_model_latest.h5')
 tokenizer_path = os.path.join(current_directory, 'tokenizer_latest.pickle')
 
-# Load the model and tokenizer
 load_model = keras.models.load_model(model_path)
 with open(tokenizer_path, 'rb') as handle:
     load_tokenizer = pickle.load(handle)
@@ -68,20 +67,22 @@ with open(tokenizer_path, 'rb') as handle:
 
 def check_post_existence(post_id):
     try:
-        # Execute a database query to check if a post with the given ID exists
+
         sql = "SELECT id FROM posts WHERE id = %s"
         cursor.execute(sql, (post_id,))
         result = cursor.fetchone()
 
-        # If a result is found, the post exists; otherwise, it doesn't
         return result is not None
 
     except pymysql.Error as e:
-        # Handle any database errors appropriately
         print(f"Database error: {e}")
         return False
 
-# Define a route for user authentication
+@app.route("/")
+def hello_world():
+    return "<p>Hello again!</p>"
+
+
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
     try:
@@ -89,7 +90,6 @@ def authenticate():
         username = data['username']
         password = data['password']
 
-        # Perform user authentication by querying the database
         sql = "SELECT * FROM users WHERE username = %s AND password = %s"
         cursor.execute(sql, (username, password))
         user = cursor.fetchone()
@@ -111,13 +111,12 @@ def add_post():
         content = request.json.get('content')
         cleaned_text = clean_text(content)
 
-        # Use a hate speech detection model
         seq = load_tokenizer.texts_to_sequences([cleaned_text])
         padded = sequence.pad_sequences(seq, maxlen=300)
         pred = load_model.predict(padded)
 
-        if pred <= 0.5:  # You can adjust the threshold as needed
-            # If it's not hate speech, add the post to the database
+        if pred <= 0.5:
+
             sql = "INSERT INTO posts (content) VALUES (%s)"
             cursor.execute(sql, (content.encode('utf-8'),))
             db.commit()
@@ -150,12 +149,12 @@ def update_post(post_id):
         content = request.json.get('content')
         cleaned_text = clean_text(content)
         post_exists = check_post_existence(post_id)
-        # Use a hate speech detection model
+
         seq = load_tokenizer.texts_to_sequences([cleaned_text])
         padded = sequence.pad_sequences(seq, maxlen=300)
         pred = load_model.predict(padded)
 
-        if pred <= 0.5:  # You can adjust the threshold as needed
+        if pred <= 0.5:
             sql = "UPDATE posts SET content = %s WHERE id = %s"
             cursor.execute(sql, (content.encode('utf-8'), post_id))
             db.commit()
