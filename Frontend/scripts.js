@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Send a POST request to your backend for authentication
         try {
-            const response = await fetch('http://localhost:3000/authenticate', {
+            const response = await fetch('http://backend:3000/authenticate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 async function fetchPosts() {
     if (postList) {
         try {
-            const response = await fetch('http://localhost:3000/get_posts');
+            const response = await fetch('http://backend:3000/get_posts');
 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -113,7 +113,7 @@ async function fetchPosts() {
 async function addPost(content) {
     if (contentInput && errorContainer) {
         try {
-            const response = await fetch('http://localhost:3000/add_post', {
+            const response = await fetch('http://backend:3000/add_post', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -146,7 +146,7 @@ async function addPost(content) {
 async function deletePost(postId) {
     if (postList) {
         try {
-            const response = await fetch(`http://localhost:3000/delete_post/${encodeURIComponent(postId)}`, {
+            const response = await fetch(`http://backend:3000/delete_post/${encodeURIComponent(postId)}`, {
                 method: 'DELETE'
             });
 
@@ -169,7 +169,7 @@ async function updatePost(postId, currentContent) {
 
         if (updatedContent !== null) {
             try {
-                const response = await fetch(`http://localhost:3000/update_post/${encodeURIComponent(postId)}`, {
+                const response = await fetch(`http://backend:3000/update_post/${encodeURIComponent(postId)}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
